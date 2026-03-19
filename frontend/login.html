@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muktijuddha Hall Dining | Login</title>
+    <link rel="stylesheet" href="design1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Login Page Specific Styles */
+        .login-main {
+            padding: 60px 0;
+            min-height: 70vh;
+            background: linear-gradient(135deg, rgba(128, 0, 0, 0.03) 0%, rgba(212, 175, 55, 0.03) 100%);
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-title {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .login-subtitle {
+            font-size: 1.2rem;
+            color: var(--medium-text);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .login-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .login-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            border-top: 5px solid var(--secondary-color);
+        }
+        
+        .login-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .login-card.admin {
+            border-top-color: var(--primary-color);
+        }
+        
+        .login-card.student {
+            border-top-color: var(--accent-color);
+        }
+        
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(139, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+        
+        .login-card.admin .card-icon {
+            background-color: rgba(139, 0, 0, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .login-card.student .card-icon {
+            background-color: rgba(212, 175, 55, 0.1);
+            color: var(--accent-color);
+        }
+        
+        .login-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .login-card p {
+            color: var(--medium-text);
+            margin-bottom: 25px;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            text-align: left;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            z-index: 2;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid var(--light-text);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--light-bg);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+            background-color: var(--white);
+        }
+        
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--medium-text);
+            cursor: pointer;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--medium-text);
+        }
+        
+        .remember-me input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--primary-color);
+        }
+        
+        .forgot-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .forgot-link:hover {
+            text-decoration: underline;
+            color: var(--primary-dark);
+        }
+        
+        /* Forgot Password Modal */
+        .forgot-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .forgot-modal.active {
+            display: flex;
+        }
+        
+        .forgot-content {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .forgot-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-header i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .forgot-header h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        
+        .forgot-instructions {
+            color: var(--medium-text);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+        
+        .modal-btn.primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .modal-btn.primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .modal-btn.secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .modal-btn.secondary:hover {
+            background-color: rgba(128, 0, 0, 0.05);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--medium-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            color: var(--primary-color);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .login-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        .login-card.student .login-btn {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+        }
+        
+        .login-card.student .login-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .signup-option {
+            margin-top: 25px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--medium-gray);
+        }
+        
+        .signup-option p {
+            color: var(--medium-text);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .signup-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        
+        .signup-btn:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        .login-card.student .signup-btn {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .login-card.student .signup-btn:hover {
+            background-color: var(--accent-color);
+            color: var(--primary-dark);
+        }
+        
+        .account-switch {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1rem;
+            color: var(--medium-text);
+        }
+        
+        .account-switch a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        
+        .account-switch a:hover {
+            text-decoration: underline;
+        }
+        
+        .login-note {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--secondary-color);
+            max-width: 800px;
+            margin: 40px auto 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .login-note p {
+            color: var(--medium-text);
+            margin: 0;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .login-note i {
+            color: var(--primary-color);
+            margin-top: 3px;
+        }
+        
+        .login-note strong {
+            color: var(--primary-color);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .login-cards {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .login-title {
+                font-size: 2rem;
+            }
+            
+            .login-subtitle {
+                font-size: 1rem;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .forgot-content {
+                padding: 30px 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .login-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="system-name">Hall Dining Management</h1>
+                        <p class="university-name">Muktijuddha Hall, CUET</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="design1.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="login.html" class="nav-link active"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="signup.html" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Login Section -->
+    <main class="login-main">
+        <div class="login-container">
+            <div class="login-header">
+                <h1 class="login-title">Login to Dining System</h1>
+                <p class="login-subtitle">Access your Muktijuddha Hall dining account. Select your role to continue.</p>
+            </div>
+            
+            <div class="login-cards">
+                <!-- Admin Login Card -->
+                <div class="login-card admin">
+                    <div class="card-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Admin Login</h3>
+                    <p>For hall management and authorized staff</p>
+                    
+                    <form class="login-form" id="adminLoginForm">
+                        <div class="form-group">
+                            <label for="admin-username" class="form-label">Username</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="admin-username" class="form-input" placeholder="Enter admin username" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-password" class="form-label">Password</label>
+                            <div class="input-with-icon password-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="admin-password" class="form-input" placeholder="Enter your password" required>
+                                <button type="button" class="toggle-password" data-target="admin-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="admin-remember">
+                                Remember me
+                            </label>
+                            <button type="button" class="forgot-link" id="adminForgotBtn">
+                                Forgot Password?
+                            </button>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login as Admin
+                        </button>
+                        
+                        <div class="signup-option">
+                            <p>Need admin access?</p>
+                            <a href="signup.html?type=admin" class="signup-btn">
+                                <i class="fas fa-user-shield"></i> Request Admin Account
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Student Login Card -->
+                <div class="login-card student">
+                    <div class="card-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Student Login</h3>
+                    <p>For residential students of Muktijuddha Hall</p>
+                    
+                    <form class="login-form" id="studentLoginForm">
+                        <div class="form-group">
+                            <label for="student-id" class="form-label">Student ID</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-id-card"></i>
+                                <input type="text" id="student-id" class="form-input" placeholder="Enter student ID" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="student-password" class="form-label">Password</label>
+                            <div class="input-with-icon password-wrapper">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="student-password" class="form-input" placeholder="Enter your password" required>
+                                <button type="button" class="toggle-password" data-target="student-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="student-remember">
+                                Remember me
+                            </label>
+                            <button type="button" class="forgot-link" id="studentForgotBtn">
+                                Forgot Password?
+                            </button>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i> Login as Student
+                        </button>
+                        
+                        <div class="signup-option">
+                            <p>New to dining system?</p>
+                            <a href="signup.html?type=student" class="signup-btn">
+                                <i class="fas fa-user-plus"></i> Create Student Account
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="account-switch">
+                Don't have an account? 
+                <a href="signup.html">Sign up here</a>
+            </div>
+            
+            <div class="login-note">
+                <p>
+                    <i class="fas fa-info-circle"></i> 
+                    If you encounter any issues logging in, please contact the Dining Services Office at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2cfc8cae2cac3cece8cc7c6d7">[email&#160;protected]</a></strong> or call <strong>01234567890</strong>.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Forgot Password Modal -->
+    <div class="forgot-modal" id="forgotModal">
+        <div class="forgot-content">
+            <button class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="forgot-header">
+                <i class="fas fa-key"></i>
+                <h3>Reset Your Password</h3>
+            </div>
+            
+            <p class="forgot-instructions">
+                Enter your username or email address. We'll send you a link to reset your password.
+            </p>
+            
+            <form id="forgotForm">
+                <div class="form-group">
+                    <label for="reset-email" class="form-label">Email or Username</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="text" id="reset-email" class="form-input" placeholder="Enter email or username" required>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="submit" class="modal-btn primary">
+                        <i class="fas fa-paper-plane"></i> Send Reset Link
+                    </button>
+                    <button type="button" class="modal-btn secondary" id="cancelReset">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Muktijuddha Hall Dining</h3>
+                    <p>Providing dining services for allotted and attached students.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="design1.html">Home</a></li>
+                        <li><a href="login.html">Login</a></li>
+                        <li><a href="signup.html">Sign Up</a></li>
+                        <li><a href="#">Dining Schedule</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Support</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Muktijuddha Hall, CUET</p>
+                    <p><i class="fas fa-phone"></i> 01234567890</p>
+                    <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd909795bd959c9191d3989988">[email&#160;protected]</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+   <script>
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const passwordInput = document.getElementById(targetId);
+            const icon = this.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+
+    // Forgot Password Modal
+    const forgotModal = document.getElementById('forgotModal');
+    document.getElementById('adminForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
+    document.getElementById('studentForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
+    document.getElementById('closeModal').addEventListener('click', () => forgotModal.classList.remove('active'));
+    document.getElementById('cancelReset').addEventListener('click', () => forgotModal.classList.remove('active'));
+    window.addEventListener('click', (e) => { if (e.target === forgotModal) forgotModal.classList.remove('active'); });
+</script>
+
+<script src="api_service.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired');
+        console.log('initLoginPage:', typeof initLoginPage);
+        
+        const adminForm = document.getElementById('adminLoginForm');
+        console.log('adminForm found:', adminForm);
+
+        if (adminForm) {
+            adminForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('admin-username').value.trim();
+                const password = document.getElementById('admin-password').value;
+                console.log('Trying login with:', email);
+                try {
+                    const res = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await res.json();
+                    console.log('Login response:', data);
+                    if (data.access) {
+                        localStorage.setItem('access_token', data.access);
+                        localStorage.setItem('refresh_token', data.refresh);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        alert('Login successful! Redirecting...');
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        alert('Login failed: ' + JSON.stringify(data));
+                    }
+                } catch(err) {
+                    console.error('Login error:', err);
+                    alert('Error: ' + err.message);
+                }
+            });
+        }
+
+        const studentForm = document.getElementById('studentLoginForm');
+        if (studentForm) {
+            studentForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('student-id').value.trim();
+                const password = document.getElementById('student-password').value;
+                try {
+                    const res = await fetch('http://127.0.0.1:8000/api/auth/login/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password })
+                    });
+                    const data = await res.json();
+                    if (data.access) {
+                        localStorage.setItem('access_token', data.access);
+                        localStorage.setItem('refresh_token', data.refresh);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        alert('Login successful! Redirecting...');
+                        window.location.href = 'student-dashboard.html';
+                    } else {
+                        alert('Login failed: ' + JSON.stringify(data));
+                    }
+                } catch(err) {
+                    alert('Error: ' + err.message);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
