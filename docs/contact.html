@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Muktijuddha Hall Dining</title>
+    <link rel="stylesheet" href="design1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Contact Page Specific Styles */
+        .contact-main {
+            padding: 60px 0;
+            background-color: var(--light-bg);
+            min-height: 100vh;
+        }
+        
+        .contact-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .contact-hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(128, 0, 0, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-radius: var(--border-radius);
+        }
+        
+        .contact-hero h1 {
+            font-size: 3rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .contact-hero p {
+            font-size: 1.2rem;
+            color: var(--medium-text);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Contact Grid */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        /* Contact Info Cards */
+        .contact-info {
+            background-color: var(--white);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .contact-info:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+        }
+        
+        .info-header h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        
+        .info-content {
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-bg);
+        }
+        
+        .info-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .info-details h4 {
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .info-details p {
+            color: var(--medium-text);
+            margin: 0;
+        }
+        
+        .info-details a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .info-details a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* Operating Hours */
+        .hours-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .hours-table tr {
+            border-bottom: 1px solid var(--light-bg);
+        }
+        
+        .hours-table tr:last-child {
+            border-bottom: none;
+        }
+        
+        .hours-table td {
+            padding: 12px 0;
+            color: var(--medium-text);
+        }
+        
+        .hours-table td:first-child {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        /* Contact Form */
+        .contact-form-container {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-header h2 {
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--medium-text);
+            font-size: 1.1rem;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1rem;
+        }
+        
+        .form-label.required:after {
+            content: " *";
+            color: var(--accent-color);
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            padding: 15px;
+            border: 1px solid var(--light-text);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: var(--light-bg);
+            font-family: inherit;
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+            background-color: var(--white);
+        }
+        
+        .form-submit {
+            padding: 16px 40px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .form-submit:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+        
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 60px;
+        }
+        
+        .faq-title {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .faq-question:hover {
+            background-color: var(--light-bg);
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+        
+        .faq-toggle {
+            color: var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        /* Map Section */
+        .map-section {
+            margin-top: 60px;
+        }
+        
+        .map-title {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .map-container {
+            height: 400px;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--medium-gray) 100%);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--medium-text);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .map-placeholder {
+            text-align: center;
+        }
+        
+        .map-placeholder i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .contact-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .contact-hero p {
+                font-size: 1rem;
+            }
+            
+            .contact-info, .contact-form-container {
+                padding: 30px 20px;
+            }
+            
+            .form-header h2 {
+                font-size: 1.8rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .faq-question {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="system-name">Hall Dining Management</h1>
+                        <p class="university-name">Muktijuddha Hall, CUET</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="design1.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="signup.html" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="contact.html" class="nav-link active"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Contact Section -->
+    <main class="contact-main">
+        <div class="contact-container">
+            <!-- Hero Section -->
+            <section class="contact-hero">
+                <h1>Contact Us</h1>
+                <p>Have questions, suggestions, or need assistance? We're here to help. Reach out to us through any of the channels below or send us a message directly.</p>
+            </section>
+            
+            <!-- Contact Grid -->
+            <div class="contact-grid">
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <div class="info-header">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3>Visit Us</h3>
+                    </div>
+                    
+                    <div class="info-content">
+                        <div class="info-item">
+                            <i class="fas fa-university"></i>
+                            <div class="info-details">
+                                <h4>Muktijuddha Hall</h4>
+                                <p>Chittagong University of Engineering & Technology</p>
+                                <p>Pahartali, Raozan, Chattogram</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <div class="info-details">
+                                <h4>Operating Hours</h4>
+                                <table class="hours-table">
+                                    <tr>
+                                        <td>Monday - Friday:</td>
+                                        <td>7:00 AM - 9:00 PM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saturday:</td>
+                                        <td>7:00 AM - 8:00 PM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunday:</td>
+                                        <td>8:00 AM - 8:00 PM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dining Hours:</td>
+                                        <td>7-9AM, 1-2:30PM, 7:30-9PM</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Get In Touch -->
+                <div class="contact-info">
+                    <div class="info-header">
+                        <div class="info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Get In Touch</h3>
+                    </div>
+                    
+                    <div class="info-content">
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <div class="info-details">
+                                <h4>Phone Numbers</h4>
+                                <p>Main Office: <a href="tel:+8801234567890">01234567890</a></p>
+                                <p>Emergency: <a href="tel:+8801234567891">01234567891</a></p>
+                                <p>Student Support: <a href="tel:+8801234567892">01234567892</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <div class="info-details">
+                                <h4>Email Addresses</h4>
+                                <p>General: <a href="/cdn-cgi/l/email-protection#97fafdffd7fff6fbfbb9f2f3e2"><span class="__cf_email__" data-cfemail="523f383a123a333e3e7c373627">[email&#160;protected]</span></a></p>
+                                <p>Support: <a href="/cdn-cgi/l/email-protection#2754525757485553674a4d4f09424352"><span class="__cf_email__" data-cfemail="ccbfb9bcbca3beb88ca1a6a4e2a9a8b9">[email&#160;protected]</span></a></p>
+                                <p>Complaints: <a href="/cdn-cgi/l/email-protection#dab9b5b7aab6bbb3b4aea99ab7b0b2f4bfbeaf"><span class="__cf_email__" data-cfemail="d2b1bdbfa2beb3bbbca6a192bfb8bafcb7b6a7">[email&#160;protected]</span></a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="fas fa-comments"></i>
+                            <div class="info-details">
+                                <h4>Social Media</h4>
+                                <p>Facebook: <a href="#">@MuktijuddhaHallCUET</a></p>
+                                <p>Twitter: <a href="#">@MJH_Dining</a></p>
+                                <p>Instagram: <a href="#">@muktijuddha_hall</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <div class="form-header">
+                    <h2>Send Us a Message</h2>
+                    <p>Fill out the form below and we'll get back to you as soon as possible.</p>
+                </div>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="form-label required">Full Name</label>
+                            <input type="text" id="name" class="form-input" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label required">Email Address</label>
+                            <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" class="form-input" placeholder="Enter your phone number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label required">Subject</label>
+                            <select id="subject" class="form-select" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="billing">Billing Issue</option>
+                                <option value="meal">Meal Related</option>
+                                <option value="complaint">Complaint</option>
+                                <option value="suggestion">Suggestion</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" class="form-label required">Message</label>
+                        <textarea id="message" class="form-textarea" placeholder="Please describe your inquiry in detail..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="form-submit">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+            
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <h2 class="faq-title">Frequently Asked Questions</h2>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What are the dining hall operating hours?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            The dining hall operates daily with the following schedule: Breakfast (7:00-9:00 AM), Lunch (1:00-2:30 PM), and Dinner (7:30-9:00 PM). On Sundays, breakfast starts at 8:00 AM.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I register for a meal plan?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            You can register for a meal plan through the student dashboard after logging into the system. Navigate to "Meal Plan" section and select your preferred plan. Payment can be made online or at the dining office.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What if I have dietary restrictions?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            We accommodate various dietary needs. Please submit a special request through the student dashboard or contact the dining manager directly at least 24 hours in advance to arrange special meals.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How can I check my meal balance?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Your current meal balance and transaction history are available in the "Billing" section of your student dashboard. You can also visit the dining office for a printed statement.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            What is the procedure for guest meals?
+                            <i class="fas fa-chevron-down faq-toggle"></i>
+                        </div>
+                        <div class="faq-answer">
+                            Students can purchase guest meal tickets at the dining office. Guest meals cost ৳150 per meal and must be paid for in advance. Guests must be accompanied by the student.
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Map Section -->
+            <section class="map-section">
+                <h2 class="map-title">Find Us on Campus</h2>
+                
+                <div class="map-container">
+                    <div class="map-placeholder">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <p>Muktijuddha Hall Location Map</p>
+                        <p>Chittagong University of Engineering & Technology</p>
+                        <p>Pahartali, Raozan, Chattogram, Bangladesh</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Muktijuddha Hall Dining</h3>
+                    <p>Always here to serve you better.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="design1.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Emergency Contact</h4>
+                    <p><i class="fas fa-phone"></i> Emergency: 01234567891</p>
+                    <p><i class="fas fa-clock"></i> 24/7 Support Available</p>
+                    <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c2921293e2b29222f350c21262462292839">[email&#160;protected]</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Mobile menu toggle
+        if (document.querySelector('.mobile-menu-btn')) {
+            document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+                const nav = document.querySelector('.main-nav');
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+        
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const faqItem = this.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it was closed
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+        
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Simple validation
+            if (!name || !email || !subject || !message) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // In a real application, this would send data to a server
+            // For demo purposes, we'll just show a success message
+            alert(`Thank you, ${name}! Your message has been received.\nWe'll respond to you at ${email} within 24 hours.`);
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Form validation for email
+        document.getElementById('email').addEventListener('blur', function() {
+            const email = this.value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (email && !emailRegex.test(email)) {
+                this.style.borderColor = 'var(--accent-color)';
+                this.setCustomValidity('Please enter a valid email address.');
+            } else {
+                this.style.borderColor = '';
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Form validation for phone number
+        document.getElementById('phone').addEventListener('blur', function() {
+            const phone = this.value;
+            const phoneRegex = /^[0-9]{11}$/;
+            
+            if (phone && !phoneRegex.test(phone)) {
+                this.style.borderColor = 'var(--accent-color)';
+                this.setCustomValidity('Please enter a valid 11-digit phone number.');
+            } else {
+                this.style.borderColor = '';
+                this.setCustomValidity('');
+            }
+        });
+        
+        // Animation for contact cards on scroll
+        const observerOptions = {
+            threshold: 0.2
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe contact info cards
+        document.querySelectorAll('.contact-info').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+        
+        // Observe form container
+        const formContainer = document.querySelector('.contact-form-container');
+        formContainer.style.opacity = '0';
+      

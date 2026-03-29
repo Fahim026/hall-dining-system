@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Muktijuddha Hall Dining</title>
+    <link rel="stylesheet" href="design1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* About Page Specific Styles */
+        .about-main {
+            padding: 60px 0;
+            background-color: var(--light-bg);
+            min-height: 100vh;
+        }
+        
+        .about-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .about-hero {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, rgba(128, 0, 0, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%);
+            border-radius: var(--border-radius);
+        }
+        
+        .about-hero h1 {
+            font-size: 3rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .about-hero p {
+            font-size: 1.2rem;
+            color: var(--medium-text);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--secondary-color);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+            bottom: -3px;
+            left: 0;
+        }
+        
+        .section-content {
+            font-size: 1.1rem;
+            color: var(--medium-text);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        /* History Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-color);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            margin-bottom: 40px;
+            position: relative;
+            width: 50%;
+            padding-right: 40px;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+            padding-left: 40px;
+            padding-right: 0;
+        }
+        
+        .timeline-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .timeline-content:after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--white);
+            transform: rotate(45deg);
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content:after {
+            right: -10px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content:after {
+            left: -10px;
+        }
+        
+        .timeline-year {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        
+        .timeline-desc {
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        /* Mission & Vision Cards */
+        .mission-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .mission-card {
+            background-color: var(--white);
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .mission-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .mission-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--white);
+            font-size: 32px;
+        }
+        
+        .mission-card h3 {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        
+        .mission-card p {
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .team-member {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .member-photo {
+            height: 250px;
+            background: linear-gradient(135deg, var(--light-bg) 0%, var(--medium-gray) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 80px;
+        }
+        
+        .member-info {
+            padding: 25px 20px;
+        }
+        
+        .member-info h4 {
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .member-role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        
+        .member-desc {
+            color: var(--medium-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .about-stats {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: var(--white);
+            padding: 60px 40px;
+            border-radius: var(--border-radius);
+            margin-top: 60px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .about-hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .timeline:before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0;
+            }
+            
+            .timeline-item:nth-child(even) {
+                margin-left: 0;
+                padding-left: 70px;
+            }
+            
+            .timeline-content:after {
+                left: -10px !important;
+                right: auto !important;
+            }
+            
+            .mission-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-area">
+                    <div class="logo-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 class="system-name">Hall Dining Management</h1>
+                        <p class="university-name">Muktijuddha Hall, CUET</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="main-nav">
+                    <ul class="nav-list">
+                        <li><a href="design1.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+                        <li><a href="signup.html" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        <li><a href="about.html" class="nav-link active"><i class="fas fa-info-circle"></i> About</a></li>
+                        <li><a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Toggle menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main About Section -->
+    <main class="about-main">
+        <div class="about-container">
+            <!-- Hero Section -->
+            <section class="about-hero">
+                <h1>About Muktijuddha Hall Dining</h1>
+                <p>Providing quality dining services to the students of CUET since 1995. Our mission is to nourish minds and build community through exceptional dining experiences.</p>
+            </section>
+            
+            <!-- Our Story Section -->
+            <section class="content-section">
+                <h2 class="section-title">Our Story</h2>
+                <div class="section-content">
+                    <p>Muktijuddha Hall Dining was established in 1995 with a vision to provide nutritious, affordable, and culturally appropriate meals to the students of Chittagong University of Engineering and Technology (CUET). Named after the spirit of our Liberation War, we strive to uphold the values of resilience, community, and excellence in all our services.</p>
+                    
+                    <p>Over the years, we have grown from a small dining facility serving 200 students to a comprehensive dining system catering to over 1,200 students daily. Our commitment to quality, hygiene, and student satisfaction has made us one of the most trusted dining services in the university.</p>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-year">1995</div>
+                            <h3 class="timeline-title">Inception</h3>
+                            <p class="timeline-desc">Muktijuddha Hall Dining established with basic meal services for 200 students.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2005</div>
+                            <h3 class="timeline-title">Expansion</h3>
+                            <p class="timeline-desc">Expanded services to accommodate 500 students with improved facilities.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2015</div>
+                            <h3 class="timeline-title">Digital Transformation</h3>
+                            <p class="timeline-desc">Implemented the first digital dining management system, serving 800 students.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-year">2023</div>
+                            <h3 class="timeline-title">Modernization</h3>
+                            <p class="timeline-desc">Launched current comprehensive dining management system serving 1,200+ students.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Mission & Vision Section -->
+            <section class="content-section">
+                <h2 class="section-title">Our Mission & Vision</h2>
+                
+                <div class="mission-cards">
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>To provide nutritious, affordable, and hygienic meals that support the academic and personal growth of every student while fostering a sense of community within the hall.</p>
+                    </div>
+                    
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3>Our Vision</h3>
+                        <p>To become the benchmark for university dining services in Bangladesh, known for excellence in food quality, service delivery, and student satisfaction.</p>
+                    </div>
+                    
+                    <div class="mission-card">
+                        <div class="mission-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Our Values</h3>
+                        <p>Quality, Integrity, Innovation, Student-Centric Approach, and Community Building guide every aspect of our dining services.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Team Section -->
+            <section class="content-section">
+                <h2 class="section-title">Our Leadership Team</h2>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="member-info">
+                            <h4>Dr. Md. Rahman</h4>
+                            <div class="member-role">Hall Provost</div>
+                            <p class="member-desc">Oversees all hall operations including dining services with 15+ years of experience.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="member-info">
+                            <h4>Chef Abdul Karim</h4>
+                            <div class="member-role">Head Chef</div>
+                            <p class="member-desc">Leads our culinary team with expertise in nutritious and delicious meal preparation.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="member-info">
+                            <h4>Fatima Begum</h4>
+                            <div class="member-role">Dining Manager</div>
+                            <p class="member-desc">Manages daily dining operations and student services with dedication.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-photo">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="member-info">
+                            <h4>Kazi Ahmed</h4>
+                            <div class="member-role">System Administrator</div>
+                            <p class="member-desc">Manages the digital dining system and ensures smooth technological operations.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Stats Section -->
+            <section class="about-stats">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">28+</div>
+                        <div class="stat-label">Years of Service</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">1,200+</div>
+                        <div class="stat-label">Students Served</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">15,000+</div>
+                        <div class="stat-label">Monthly Meals</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Staff Members</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Muktijuddha Hall Dining</h3>
+                    <p>Nourishing minds, building community since 1995.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="login.html">Login</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Muktijuddha Hall, CUET</p>
+                    <p><i class="fas fa-phone"></i> 01234567890</p>
+                    <p><i class="fas fa-envelope"></i> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6a0700024703040c052a020b0606440f0e1f">[email&#160;protected]</a></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Mobile menu toggle
+        if (document.querySelector('.mobile-menu-btn')) {
+            document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+                const nav = document.querySelector('.main-nav');
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+        
+        // Animation for timeline items on scroll
+        const observerOptions = {
+            threshold: 0.2
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe timeline items
+        document.querySelectorAll('.timeline-content').forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(20px)';
+            item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(item);
+        });
+        
+        // Observe mission cards
+        document.querySelectorAll('.mission-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s';
+            observer.observe(card);
+        });
+        
+        // Observe team members
+        document.querySelectorAll('.team-member').forEach(member => {
+            member.style.opacity = '0';
+    
