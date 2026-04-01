@@ -658,7 +658,7 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
         const lunch = document.getElementById('lunchMenu').value;
         const dinner = document.getElementById('dinnerMenu').value;
         const announcement = document.getElementById('menuAnnouncement').value;
-        updateMenuPreview(, lunch, dinner, announcement);
+        updateMenuPreview(lunch, dinner, announcement);
 
         // Try to send notification
         if (announcement) {
@@ -676,7 +676,7 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
     finally { btn.disabled=false; btn.innerHTML=orig; }
 });
 
-function updateMenuPreview(, lunch, dinner, announcement) {
+function updateMenuPreview(lunch, dinner, announcement) {
     
     setEl('previewLunch', lunch || 'Not set');
     setEl('previewDinner', dinner || 'Not set');
@@ -695,7 +695,7 @@ async function loadTodaysMenu() {
         const d = await api('GET',`/menu/?date=${today}`);
         const menu = d.results ? d.results[0] : d[0];
         if (menu) {
-            updateMenuPreview( menu.lunch, menu.dinner, menu.announcement);
+            updateMenuPreview(menu.lunch, menu.dinner, menu.announcement);
         }
     } catch(e){ console.log('Menu API not available'); }
 }
@@ -800,7 +800,7 @@ async function loadPendingMealOffs() {
 async function handleMealOff(id, status) {
     const note = document.getElementById(`mealOffNote_${id}`)?.value || '';
     try {
-        await api('PATCH',`/meal-off/${id}/`,{ status, admin_note: note });
+        await api('POST',`/meal-off/${id}/review/`,{ status, admin_note: note });
         toast(`Request ${status}!`, status==='approved'?'success':'info');
         loadPendingMealOffs(); loadAdminStats();
     } catch(e){ toast('Error updating request.','error'); }
@@ -844,7 +844,7 @@ async function handleGuestMeal(id, status) {
     const charge = document.getElementById(`guestCharge_${id}`)?.value || 0;
     const note = document.getElementById(`guestNote_${id}`)?.value || '';
     try {
-        await api('PATCH',`/guest-meals/${id}/`,{ status, extra_charge: parseFloat(charge)||0, admin_note: note });
+        await api('POST',`/guest-meals/${id}/review/`,{ status, extra_charge: parseFloat(charge)||0, admin_note: note });
         toast(`Request ${status}!`, status==='approved'?'success':'info');
         loadPendingGuestMeals(); loadAdminStats();
     } catch(e){ toast('Error updating request.','error'); }
