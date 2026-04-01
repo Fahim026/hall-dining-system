@@ -209,10 +209,7 @@
                     <h3 class="card-title"><i class="fas fa-calendar-day"></i> Today's Menu</h3>
                 </div>
                 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px">
-                    <div style="padding:15px;background:var(--light-bg);border-radius:8px;border-left:4px solid var(--secondary-color)">
-                        <div style="font-weight:600;color:var(--primary-dark);margin-bottom:8px">🌅 Breakfast • 7:00 - 9:00 AM</div>
-                        <p style="color:var(--medium-text)">Bread, Egg, Tea</p>
-                    </div>
+                    
                     <div style="padding:15px;background:var(--light-bg);border-radius:8px;border-left:4px solid var(--secondary-color)">
                         <div style="font-weight:600;color:var(--primary-dark);margin-bottom:8px">☀️ Lunch • 1:00 - 2:30 PM</div>
                         <p style="color:var(--medium-text)">Rice, Fish Curry, Lentils, Vegetable</p>
@@ -237,7 +234,6 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>🌅 Breakfast</th>
                                 <th>☀️ Lunch</th>
                                 <th>🌙 Dinner</th>
                                 <th>Total</th>
@@ -308,7 +304,7 @@
                     <div class="form-group" style="margin-bottom:15px">
                         <label class="form-label">Which meals to skip?</label>
                         <div class="checkbox-group">
-                            <label class="checkbox-label"><input type="checkbox" id="skipBreakfast"> 🌅 Breakfast</label>
+                           
                             <label class="checkbox-label"><input type="checkbox" id="skipLunch"> ☀️ Lunch</label>
                             <label class="checkbox-label"><input type="checkbox" id="skipDinner"> 🌙 Dinner</label>
                         </div>
@@ -353,7 +349,7 @@
                             <label class="form-label">Meal Type *</label>
                             <select id="guestMealType" class="form-select" required>
                                 <option value="">-- Select --</option>
-                                <option value="breakfast">🌅 Breakfast</option>
+                               
                                 <option value="lunch">☀️ Lunch</option>
                                 <option value="dinner">🌙 Dinner</option>
                             </select>
@@ -555,7 +551,7 @@ async function loadStudentMealHistory() {
         const tbody=document.getElementById('mealHistoryBody');
         const entries=d.results||d;
         if(!entries.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#999;padding:20px">No meal entries yet.</td></tr>'; return; }
-        tbody.innerHTML=entries.map(e=>`<tr><td>${fmtDate(e.date)}</td><td>${e.breakfast?'✅':'❌'}</td><td>${e.lunch?'✅':'❌'}</td><td>${e.dinner?'✅':'❌'}</td><td><strong>${e.total_meals}</strong></td></tr>`).join('');
+        tbody.innerHTML=entries.map(e=>`<tr><td>${fmtDate(e.date)}</td><td>${e.lunch?'✅':'❌'}</td><td>${e.dinner?'✅':'❌'}</td><td><strong>${e.total_meals}</strong></td></tr>`).join('');
     } catch(e){ console.error(e); }
 }
 
@@ -586,7 +582,7 @@ async function loadStudentMealOffRequests() {
                 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center">
                     <div>
                         <strong>${fmtDate(r.start_date)} → ${fmtDate(r.end_date)}</strong>
-                        <div style="font-size:0.85rem;color:#666;margin-top:4px">${r.skip_breakfast?'🌅 Breakfast ':''} ${r.skip_lunch?'☀️ Lunch ':''} ${r.skip_dinner?'🌙 Dinner':''}</div>
+                        <div style="font-size:0.85rem;color:#666;margin-top:4px"> ${r.skip_lunch?'☀️ Lunch ':''} ${r.skip_dinner?'🌙 Dinner':''}</div>
                         ${r.reason?`<div style="font-size:0.85rem;color:#666;margin-top:4px">${r.reason}</div>`:''}
                         ${r.admin_note?`<div style="font-size:0.85rem;color:#800000;margin-top:4px">Admin: ${r.admin_note}</div>`:''}
                     </div>
@@ -672,7 +668,7 @@ document.getElementById('mealOffForm').addEventListener('submit', async function
     const btn=this.querySelector('[type="submit"]'); const orig=btn.innerHTML;
     btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
     try {
-        await api('POST','/meal-off/',{ start_date:document.getElementById('mealOffStart').value, end_date:document.getElementById('mealOffEnd').value, skip_breakfast:document.getElementById('skipBreakfast').checked, skip_lunch:document.getElementById('skipLunch').checked, skip_dinner:document.getElementById('skipDinner').checked, reason:document.getElementById('mealOffReason').value||'' });
+        await api('POST','/meal-off/',{ start_date:document.getElementById('mealOffStart').value, end_date:document.getElementById('mealOffEnd').value, skip_lunch:document.getElementById('skipLunch').checked, skip_dinner:document.getElementById('skipDinner').checked, reason:document.getElementById('mealOffReason').value||'' });
         toast('Meal-off request submitted!','success');
         this.reset(); loadStudentMealOffRequests(); loadStats();
     } catch(err){ toast(err.detail||Object.values(err).flat().join(' ')||'Error.','error'); }
