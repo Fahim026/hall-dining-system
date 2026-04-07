@@ -377,7 +377,7 @@ async function loadStudentMealHistory() {
         tbody.innerHTML = entries.map(e => `
             <tr>
                 <td>${formatDate(e.date)}</td>
-                <td>${e.breakfast ? '✅' : '❌'}</td>
+                
                 <td>${e.lunch ? '✅' : '❌'}</td>
                 <td>${e.dinner ? '✅' : '❌'}</td>
                 <td><strong>${e.total_meals}</strong></td>
@@ -402,7 +402,7 @@ async function loadStudentMealOffRequests() {
                     <div>
                         <strong>${formatDate(r.start_date)} → ${formatDate(r.end_date)}</strong>
                         <div style="font-size:0.85rem;color:#666;margin-top:4px">
-                            ${r.skip_breakfast ? '🌅 Breakfast ' : ''}${r.skip_lunch ? '☀️ Lunch ' : ''}${r.skip_dinner ? '🌙 Dinner' : ''}
+                            ${r.skip_lunch ? '☀️ Lunch ' : ''}${r.skip_dinner ? '🌙 Dinner' : ''}
                         </div>
                         ${r.reason ? `<div style="font-size:0.85rem;color:#666;margin-top:4px">${r.reason}</div>` : ''}
                         ${r.admin_note ? `<div style="font-size:0.85rem;color:#800000;margin-top:4px">Admin: ${r.admin_note}</div>` : ''}
