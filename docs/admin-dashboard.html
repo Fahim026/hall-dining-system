@@ -665,7 +665,7 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
             try {
                 await api('POST','/notifications/send-all/',{
                     title: "📢 Today's Menu & Notice",
-                   Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
+                   message:`Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
                 });
                 toast('Menu announcement sent to all students!','success');
             } catch(e2) { toast('Menu preview updated.','info'); }
