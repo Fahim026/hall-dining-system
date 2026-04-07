@@ -269,10 +269,7 @@
                 <p style="color:var(--medium-text);margin-bottom:20px">Update today's meal menu. Students will see this on their dashboard.</p>
                 <form id="menuForm">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label">🌅 Breakfast Menu</label>
-                            <input type="text" id="breakfastMenu" class="form-input" placeholder="e.g. Bread, Egg, Tea">
-                        </div>
+                        
                         <div class="form-group">
                             <label class="form-label">☀️ Lunch Menu</label>
                             <input type="text" id="lunchMenu" class="form-input" placeholder="e.g. Rice, Fish Curry, Lentils">
@@ -302,10 +299,7 @@
                 </div>
                 <div id="menuPreview">
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px">
-                        <div class="menu-meal-card">
-                            <h4>🌅 Breakfast</h4>
-                            <p id="previewBreakfast">Not set</p>
-                        </div>
+                        
                         <div class="menu-meal-card">
                             <h4>☀️ Lunch</h4>
                             <p id="previewLunch">Not set</p>
@@ -638,14 +632,14 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
     const btn=this.querySelector('[type="submit"]'); const orig=btn.innerHTML;
     btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Publishing...';
     try {
-        const breakfast = document.getElementById('breakfastMenu').value;
+        
         const lunch = document.getElementById('lunchMenu').value;
         const dinner = document.getElementById('dinnerMenu').value;
         const announcement = document.getElementById('menuAnnouncement').value;
         const date = document.getElementById('menuDate').value;
 
         // Save menu to API
-        await api('POST','/menu/',{ date, breakfast, lunch, dinner, announcement });
+        await api('POST','/menu/',{ date, lunch, dinner, announcement });
 
         // Also send notification if announcement exists
         if (announcement) {
@@ -657,21 +651,21 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
 
         toast('Menu published successfully! Students will see the update.','success');
         loadTodaysMenu();
-        updateMenuPreview(breakfast, lunch, dinner, announcement);
+        updateMenuPreview( lunch, dinner, announcement);
     } catch(err){
         // If menu API doesn't exist, just save locally and notify
-        const breakfast = document.getElementById('breakfastMenu').value;
+        
         const lunch = document.getElementById('lunchMenu').value;
         const dinner = document.getElementById('dinnerMenu').value;
         const announcement = document.getElementById('menuAnnouncement').value;
-        updateMenuPreview(breakfast, lunch, dinner, announcement);
+        updateMenuPreview(lunch, dinner, announcement);
 
         // Try to send notification
         if (announcement) {
             try {
                 await api('POST','/notifications/send-all/',{
                     title: "📢 Today's Menu & Notice",
-                    message: `Breakfast: ${breakfast || 'N/A'} | Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
+                   Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
                 });
                 toast('Menu announcement sent to all students!','success');
             } catch(e2) { toast('Menu preview updated.','info'); }
@@ -682,8 +676,8 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
     finally { btn.disabled=false; btn.innerHTML=orig; }
 });
 
-function updateMenuPreview(breakfast, lunch, dinner, announcement) {
-    setEl('previewBreakfast', breakfast || 'Not set');
+function updateMenuPreview(lunch, dinner, announcement) {
+    
     setEl('previewLunch', lunch || 'Not set');
     setEl('previewDinner', dinner || 'Not set');
     const annDiv = document.getElementById('previewAnnouncement');
@@ -701,7 +695,7 @@ async function loadTodaysMenu() {
         const d = await api('GET',`/menu/?date=${today}`);
         const menu = d.results ? d.results[0] : d[0];
         if (menu) {
-            updateMenuPreview(menu.breakfast, menu.lunch, menu.dinner, menu.announcement);
+            updateMenuPreview(menu.lunch, menu.dinner, menu.announcement);
         }
     } catch(e){ console.log('Menu API not available'); }
 }
@@ -790,7 +784,7 @@ async function loadPendingMealOffs() {
                     <div>
                         <strong>${r.student_name||'Student'}</strong>
                         <div style="font-size:0.9rem;color:#666;margin-top:4px">${fmtDate(r.start_date)} → ${fmtDate(r.end_date)}</div>
-                        <div style="font-size:0.85rem;color:#666;margin-top:4px">${r.skip_breakfast?'🌅 ':''} ${r.skip_lunch?'☀️ ':''} ${r.skip_dinner?'🌙':''}</div>
+                        <div style="font-size:0.85rem;color:#666;margin-top:4px">${r.skip_lunch?'☀️ ':''} ${r.skip_dinner?'🌙':''}</div>
                         ${r.reason?`<div style="font-size:0.85rem;color:#666;margin-top:4px">Reason: ${r.reason}</div>`:''}
                     </div>
                     <div class="request-actions">
