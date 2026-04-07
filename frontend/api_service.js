@@ -487,7 +487,7 @@ function initMealOffForm() {
             const payload = {
                 start_date:      document.getElementById('mealOffStart').value,
                 end_date:        document.getElementById('mealOffEnd').value,
-                skip_breakfast:  document.getElementById('skipBreakfast')?.checked || false,
+               
                 skip_lunch:      document.getElementById('skipLunch')?.checked || false,
                 skip_dinner:     document.getElementById('skipDinner')?.checked || false,
                 reason:          document.getElementById('mealOffReason')?.value || '',
@@ -671,7 +671,7 @@ async function loadPendingMealOffs() {
                         <strong>${r.student_name}</strong>
                         <div style="font-size:0.9rem;color:#666;margin-top:4px">${formatDate(r.start_date)} → ${formatDate(r.end_date)}</div>
                         <div style="font-size:0.85rem;color:#666;margin-top:2px">
-                            ${r.skip_breakfast ? '🌅 Breakfast ' : ''}${r.skip_lunch ? '☀️ Lunch ' : ''}${r.skip_dinner ? '🌙 Dinner' : ''}
+                            ${r.skip_lunch ? '☀️ Lunch ' : ''}${r.skip_dinner ? '🌙 Dinner' : ''}
                         </div>
                         ${r.reason ? `<div style="font-size:0.85rem;margin-top:4px;font-style:italic">"${r.reason}"</div>` : ''}
                         <div style="margin-top:8px">
@@ -796,7 +796,7 @@ function initAdminMealEntryForm() {
                 const payload = {
                     student: parseInt(document.getElementById('mealEntryStudent').value),
                     date: document.getElementById('mealEntryDate').value,
-                    breakfast: document.getElementById('mealBreakfast')?.checked || false,
+                    
                     lunch: document.getElementById('mealLunch')?.checked || false,
                     dinner: document.getElementById('mealDinner')?.checked || false,
                 };
@@ -806,7 +806,7 @@ function initAdminMealEntryForm() {
                 const date = document.getElementById('mealEntryDate').value;
                 const entries = Array.from(rows).map(row => ({
                     student_id: parseInt(row.dataset.studentId),
-                    breakfast: row.querySelector('.cb-breakfast')?.checked || false,
+                    
                     lunch: row.querySelector('.cb-lunch')?.checked || false,
                     dinner: row.querySelector('.cb-dinner')?.checked || false,
                 }));
@@ -988,7 +988,7 @@ async function loadBulkMealTable() {
                 <thead>
                     <tr style="background:#f5f5f5">
                         <th style="padding:10px;text-align:left;border-bottom:2px solid #800000">Student</th>
-                        <th style="padding:10px;text-align:center">🌅 Breakfast</th>
+                        
                         <th style="padding:10px;text-align:center">☀️ Lunch</th>
                         <th style="padding:10px;text-align:center">🌙 Dinner</th>
                     </tr>
@@ -997,7 +997,7 @@ async function loadBulkMealTable() {
                     ${students.map(s => `
                         <tr data-student-id="${s.id}" style="border-bottom:1px solid #eee">
                             <td style="padding:10px">${s.name}</td>
-                            <td style="padding:10px;text-align:center"><input type="checkbox" class="cb-breakfast" style="width:18px;height:18px"></td>
+                            
                             <td style="padding:10px;text-align:center"><input type="checkbox" class="cb-lunch" style="width:18px;height:18px"></td>
                             <td style="padding:10px;text-align:center"><input type="checkbox" class="cb-dinner" style="width:18px;height:18px"></td>
                         </tr>
