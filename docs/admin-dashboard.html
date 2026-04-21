@@ -889,7 +889,7 @@ async function loadPendingDeposits() {
         const entries = d.results || d;
         if (!entries.length) { container.innerHTML='<p style="color:#999;text-align:center;padding:20px">No pending deposits.</p>'; return; }
         container.innerHTML = entries.map(dep=>`
-            <div class="request-card" style="border-left:4px solid #9C27B0">
+            <div class="request-card" style="border-left:4px solid #9C27B0" data-id="${dep.id}">
                 <div class="request-flex">
                     <div>
                         <strong>${dep.student_name||'Student'}</strong> — <strong style="color:var(--primary-color)">${fmt(dep.deposited_amount)}</strong>
@@ -915,15 +915,25 @@ async function confirmDeposit(id) {
         const data = await res.json();
         if (res.ok) {
             toast('Deposit confirmed!','success');
-            loadPendingDeposits();
+            // Remove card immediately from UI
+            const card = document.querySelector(`.request-card[data-id="${id}"]`);
+            if (card) {
+                card.remove();
+            } else {
+                // Reload if card not found
+                await loadPendingDeposits();
+            }
             loadDepositHistory();
             loadAdminStats();
         } else {
             toast('Error: '+JSON.stringify(data),'error');
+            console.error(data);
         }
-    } catch(e) { toast('Error confirming.','error'); }
-}
-    async function rejectDeposit(id) {
+    } catch(e) { 
+        toast('Error confirming.','error'); 
+        console.error(e); 
+    }
+}    async function rejectDeposit(id) {
     if (!confirm('Reject this deposit?')) return;
     try {
         await api('DELETE',`/deposits/${id}/`);
