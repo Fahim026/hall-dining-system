@@ -4,7 +4,7 @@ from django.utils import timezone
 from .models import (
     MonthlyDeposit, MealRate, DailyMealEntry,
     MealOffRequest, MealOffLimit, GuestMealRequest,
-    BazarEntry, Notification
+    BazarEntry, Notification, DiningDay,
 )
 
 User = get_user_model()
@@ -208,3 +208,8 @@ class AdminDashboardSerializer(serializers.Serializer):
     pending_meal_offs = serializers.IntegerField()
     pending_guest_meals = serializers.IntegerField()
     pending_deposits = serializers.IntegerField()
+
+class DiningDaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DiningDay
+        fields = ['id', 'date', 'is_open', 'note', 'created_at']

@@ -56,4 +56,6 @@ urlpatterns = [
     # ── Dashboards ────────────────────────────────────
     path('dashboard/student/', views.StudentDashboardView.as_view(), name='student-dashboard'),
     path('dashboard/admin/', views.AdminDashboardView.as_view(), name='admin-dashboard'),
+    path('dining-days/', views.DiningDayListView.as_view(), name='dining-days'),
+    path('meal-summary/', views.StudentMealSummaryView.as_view(), name='meal-summary'),
 ]

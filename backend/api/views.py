@@ -11,7 +11,7 @@ from datetime import date, timedelta
 from .models import (
     MonthlyDeposit, MealRate, DailyMealEntry,
     MealOffRequest, MealOffLimit, GuestMealRequest,
-    BazarEntry, Notification
+    BazarEntry, Notification, DiningDay
 )
 from .serializers import (
     RegisterSerializer, UserSerializer, UserAdminSerializer,
@@ -20,7 +20,8 @@ from .serializers import (
     MealOffRequestSerializer, MealOffReviewSerializer, MealOffLimitSerializer,
     GuestMealRequestSerializer, GuestMealReviewSerializer,
     BazarEntrySerializer, NotificationSerializer,
-    StudentDashboardSerializer, AdminDashboardSerializer
+    StudentDashboardSerializer, AdminDashboardSerializer,
+    DiningDaySerializer
 )
 from .permissions import IsAdmin, IsStudent, IsAdminOrReadOwn
 
@@ -709,4 +710,169 @@ class AdminDashboardView(views.APIView):
             'pending_meal_offs': pending_meal_offs,
             'pending_guest_meals': pending_guest,
             'pending_deposits': pending_deposits,
+        })
+    
+class DiningDayListView(views.APIView):
+    """List and create dining days"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        month = request.query_params.get('month', timezone.now().month)
+        year = request.query_params.get('year', timezone.now().year)
+        days = DiningDay.objects.filter(
+            date__month=month,
+            date__year=year
+        )
+        serializer = DiningDaySerializer(days, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        if request.user.role != 'admin':
+            return Response({'error': 'Admin only'}, status=403)
+        date = request.data.get('date')
+        is_open = request.data.get('is_open', True)
+        note = request.data.get('note', '')
+        # Update or create
+        dining_day, created = DiningDay.objects.update_or_create(
+            date=date,
+            defaults={
+                'is_open': is_open,
+                'note': note,
+                'created_by': request.user
+            }
+        )
+        serializer = DiningDaySerializer(dining_day)
+        return Response(serializer.data)
+
+
+class StudentMealSummaryView(views.APIView):
+    """Get student meal summary with dining days and meal off"""
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        month = int(request.query_params.get('month', timezone.now().month))
+        year = int(request.query_params.get('year', timezone.now().year))
+        student = request.user
+
+        # Get all dining open days this month
+        from datetime import date, timedelta
+        import calendar
+
+        # Get days in month
+        days_in_month = calendar.monthrange(year, month)[1]
+        today = date.today()
+
+        # Get closed dining days
+        closed_days = set(
+            DiningDay.objects.filter(
+                date__month=month,
+                date__year=year,
+                is_open=False
+            ).values_list('date', flat=True)
+        )
+
+        # Get approved meal off days for this student
+        meal_off_requests = MealOffRequest.objects.filter(
+            student=student,
+            status='approved',
+            start_date__year=year,
+            start_date__month=month
+        )
+
+        meal_off_days = {}
+        for req in meal_off_requests:
+            current = req.start_date
+            while current <= req.end_date:
+                if current.month == month:
+                    meal_off_days[current] = {
+                        'lunch': req.skip_lunch,
+                        'dinner': req.skip_dinner
+                    }
+                current += timedelta(days=1)
+
+        # Build daily summary
+        daily_summary = []
+        total_lunch = 0
+        total_dinner = 0
+
+        for day in range(1, days_in_month + 1):
+            current_date = date(year, month, day)
+            if current_date > today:
+                break
+
+            # Check if dining closed
+            if current_date in closed_days:
+                daily_summary.append({
+                    'date': current_date,
+                    'lunch': False,
+                    'dinner': False,
+                    'status': 'dining_closed',
+                    'note': 'Dining Closed'
+                })
+                continue
+
+            # Check meal off
+            meal_off = meal_off_days.get(current_date, {})
+            lunch = not meal_off.get('lunch', False)
+            dinner = not meal_off.get('dinner', False)
+
+            status = 'normal'
+            if meal_off:
+                status = 'meal_off'
+
+            if lunch:
+                total_lunch += 1
+            if dinner:
+                total_dinner += 1
+
+            daily_summary.append({
+                'date': current_date,
+                'lunch': lunch,
+                'dinner': dinner,
+                'status': status,
+                'note': 'Meal Off' if meal_off else ''
+            })
+
+        # Get meal rate
+        try:
+            meal_rate_obj = MealRate.objects.get(month=month, year=year)
+            meal_rate = float(meal_rate_obj.rate_per_meal)
+        except MealRate.DoesNotExist:
+            meal_rate = 0
+
+        total_meals = total_lunch + total_dinner
+        total_cost = total_meals * meal_rate
+
+        # Get deposit
+        try:
+            deposit = MonthlyDeposit.objects.get(
+                student=student,
+                month=month,
+                year=year
+            )
+            deposited = float(deposit.deposited_amount)
+        except MonthlyDeposit.DoesNotExist:
+            deposited = 0
+
+        balance = deposited - total_cost
+
+        return Response({
+            'daily_summary': [
+                {
+                    'date': str(d['date']),
+                    'lunch': d['lunch'],
+                    'dinner': d['dinner'],
+                    'status': d['status'],
+                    'note': d['note']
+                } for d in daily_summary
+            ],
+            'total_lunch': total_lunch,
+            'total_dinner': total_dinner,
+            'total_meals': total_meals,
+            'meal_rate': meal_rate,
+            'total_cost': total_cost,
+            'deposited_amount': deposited,
+            'balance': balance,
+            'month': month,
+            'year': year
         })

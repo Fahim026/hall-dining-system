@@ -222,3 +222,18 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.name}: {self.title}"
+
+
+class DiningDay(models.Model):
+    date = models.DateField(unique=True)
+    is_open = models.BooleanField(default=True)
+    note = models.CharField(max_length=255, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']
+
+    def __str__(self):
+        status = 'Open' if self.is_open else 'Closed'
+        return f"{self.date} - {status}"
