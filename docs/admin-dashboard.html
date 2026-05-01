@@ -299,7 +299,7 @@
                 </div>
                 <div id="menuPreview">
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px">
-                       
+                        
                         <div class="menu-meal-card">
                             <h4>☀️ Lunch</h4>
                             <p id="previewLunch">Not set</p>
@@ -424,6 +424,13 @@
                 <div id="pendingMealOffList">
                     <p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p>
                 </div>
+                <div class="management-section" style="margin-top:20px">
+    <div class="section-header">
+        <h3 class="section-title"><i class="fas fa-history"></i> Meal Off History</h3>
+        <button class="btn btn-outline btn-sm" onclick="loadMealOffHistory()"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+    <div id="mealOffHistoryList"><p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p></div>
+</div>
             </div>
         </div>
 
@@ -437,6 +444,13 @@
                 <div id="pendingGuestMealList">
                     <p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p>
                 </div>
+                <div class="management-section" style="margin-top:20px">
+    <div class="section-header">
+        <h3 class="section-title"><i class="fas fa-history"></i> Guest Meal History</h3>
+        <button class="btn btn-outline btn-sm" onclick="loadGuestMealHistory()"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+    <div id="guestMealHistoryList"><p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p></div>
+</div>
             </div>
         </div>
 
@@ -450,6 +464,13 @@
                 <div id="pendingDepositList">
                     <p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p>
                 </div>
+                <div class="management-section" style="margin-top:20px">
+    <div class="section-header">
+        <h3 class="section-title"><i class="fas fa-history"></i> Confirmed Deposits</h3>
+        <button class="btn btn-outline btn-sm" onclick="loadDepositHistory()"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+    <div id="depositHistoryList"><p style="color:#999;text-align:center;padding:20px">Click Refresh to load</p></div>
+</div>
             </div>
         </div>
 
@@ -665,7 +686,7 @@ document.getElementById('menuForm').addEventListener('submit', async function(e)
             try {
                 await api('POST','/notifications/send-all/',{
                     title: "📢 Today's Menu & Notice",
-                    message: ` Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
+                   message:`Lunch: ${lunch || 'N/A'} | Dinner: ${dinner || 'N/A'}${announcement ? '\n\n' + announcement : ''}`
                 });
                 toast('Menu announcement sent to all students!','success');
             } catch(e2) { toast('Menu preview updated.','info'); }
@@ -695,7 +716,7 @@ async function loadTodaysMenu() {
         const d = await api('GET',`/menu/?date=${today}`);
         const menu = d.results ? d.results[0] : d[0];
         if (menu) {
-            updateMenuPreview( menu.lunch, menu.dinner, menu.announcement);
+            updateMenuPreview(menu.lunch, menu.dinner, menu.announcement);
         }
     } catch(e){ console.log('Menu API not available'); }
 }
@@ -798,12 +819,17 @@ async function loadPendingMealOffs() {
 }
 
 async function handleMealOff(id, status) {
-    const note = document.getElementById(`mealOffNote_${id}`)?.value || '';
+    const note = document.getElementById(`mealOffNote_${id}`)?.value||'';
     try {
-        await api('PATCH',`/meal-off/${id}/`,{ status, admin_note: note });
+        await api('POST',`/meal-off/${id}/review/`,{status, admin_note:note});
         toast(`Request ${status}!`, status==='approved'?'success':'info');
-        loadPendingMealOffs(); loadAdminStats();
-    } catch(e){ toast('Error updating request.','error'); }
+        loadPendingMealOffs();
+        loadMealOffHistory();
+        loadAdminStats();
+    } catch(e) {
+        console.error('MealOff error:',e);
+        toast('Error: '+JSON.stringify(e),'error');
+    }
 }
 
 async function setMealOffLimit() {
@@ -841,13 +867,18 @@ async function loadPendingGuestMeals() {
 }
 
 async function handleGuestMeal(id, status) {
-    const charge = document.getElementById(`guestCharge_${id}`)?.value || 0;
-    const note = document.getElementById(`guestNote_${id}`)?.value || '';
+    const charge = document.getElementById(`guestCharge_${id}`)?.value||0;
+    const note = document.getElementById(`guestNote_${id}`)?.value||'';
     try {
-        await api('PATCH',`/guest-meals/${id}/`,{ status, extra_charge: parseFloat(charge)||0, admin_note: note });
+        await api('POST',`/guest-meals/${id}/review/`,{status,extra_charge:parseFloat(charge)||0,admin_note:note});
         toast(`Request ${status}!`, status==='approved'?'success':'info');
-        loadPendingGuestMeals(); loadAdminStats();
-    } catch(e){ toast('Error updating request.','error'); }
+        loadPendingGuestMeals();
+        loadGuestMealHistory();
+        loadAdminStats();
+    } catch(e) {
+        console.error('GuestMeal error:',e);
+        toast('Error: '+JSON.stringify(e),'error');
+    }
 }
 
 // Load pending deposits
@@ -858,7 +889,7 @@ async function loadPendingDeposits() {
         const entries = d.results || d;
         if (!entries.length) { container.innerHTML='<p style="color:#999;text-align:center;padding:20px">No pending deposits.</p>'; return; }
         container.innerHTML = entries.map(dep=>`
-            <div class="request-card" style="border-left:4px solid #9C27B0">
+            <div class="request-card" style="border-left:4px solid #9C27B0" data-id="${dep.id}">
                 <div class="request-flex">
                     <div>
                         <strong>${dep.student_name||'Student'}</strong> — <strong style="color:var(--primary-color)">${fmt(dep.deposited_amount)}</strong>
@@ -876,38 +907,106 @@ async function loadPendingDeposits() {
 
 async function confirmDeposit(id) {
     try {
-        const token = getToken();
-        console.log('Token:', token);
-        console.log('URL:', BASE+`/deposits/${id}/confirm/`);
-        
         const res = await fetch(BASE+`/deposits/${id}/confirm/`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
+            headers: {'Content-Type':'application/json','Authorization':'Bearer '+getToken()},
             body: JSON.stringify({})
         });
         const data = await res.json();
-        console.log('Response status:', res.status);
-        console.log('Response data:', data);
-        
         if (res.ok) {
             toast('Deposit confirmed!','success');
-            document.querySelector(`[data-id="${id}"]`)?.remove();
+            // Remove card immediately from UI
+            const card = document.querySelector(`.request-card[data-id="${id}"]`);
+            if (card) {
+                card.remove();
+            } else {
+                // Reload if card not found
+                await loadPendingDeposits();
+            }
+            loadDepositHistory();
             loadAdminStats();
         } else {
-            toast('Error: ' + JSON.stringify(data), 'error');
+            toast('Error: '+JSON.stringify(data),'error');
+            console.error(data);
         }
-    } catch(e){ 
-        toast('Error: '+e.message,'error'); 
+    } catch(e) { 
+        toast('Error confirming.','error'); 
         console.error(e); 
     }
+}    async function rejectDeposit(id) {
+    if (!confirm('Reject this deposit?')) return;
+    try {
+        await api('DELETE',`/deposits/${id}/`);
+        toast('Deposit rejected.','info');
+        loadPendingDeposits();
+        loadDepositHistory();
+        loadAdminStats();
+    } catch(e) { toast('Error rejecting.','error'); }
 }
-async function rejectDeposit(id) {
-    if(!confirm('Reject this deposit?')) return;
-    try { await api('DELETE',`/deposits/${id}/`); toast('Deposit rejected.','info'); loadPendingDeposits(); loadAdminStats(); }
-    catch(e){ toast('Error rejecting deposit.','error'); }
+    async function loadMealOffHistory() {
+    try {
+        const d = await api('GET','/meal-off/');
+        const container = document.getElementById('mealOffHistoryList');
+        if (!container) return;
+        const entries = (d.results||d).filter(r => r.status !== 'pending');
+        if (!entries.length) { container.innerHTML='<p style="color:#999;text-align:center;padding:20px">No history yet.</p>'; return; }
+        const statusColor = s => ({approved:'#4CAF50',rejected:'#f44336',cancelled:'#9E9E9E'}[s]||'#666');
+        container.innerHTML = entries.map(r=>`
+            <div style="padding:15px;background:var(--light-bg);border-radius:8px;margin-bottom:10px;border-left:4px solid ${statusColor(r.status)}">
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                    <div>
+                        <strong>${r.student_name||'Student'}</strong>
+                        <div style="font-size:0.9rem;color:#666">${r.start_date} → ${r.end_date}</div>
+                        <div style="font-size:0.85rem;color:#666">${r.skip_lunch?'☀️ ':''} ${r.skip_dinner?'🌙':''}</div>
+                        ${r.admin_note?`<div style="font-size:0.85rem;color:#800000">Admin note: ${r.admin_note}</div>`:''}
+                    </div>
+                    <span style="background:${statusColor(r.status)}20;color:${statusColor(r.status)};padding:5px 12px;border-radius:20px;font-weight:600;font-size:0.85rem">${r.status.toUpperCase()}</span>
+                </div>
+            </div>`).join('');
+    } catch(e) { console.error(e); }
+}
+
+async function loadGuestMealHistory() {
+    try {
+        const d = await api('GET','/guest-meals/');
+        const container = document.getElementById('guestMealHistoryList');
+        if (!container) return;
+        const entries = (d.results||d).filter(r => r.status !== 'pending');
+        if (!entries.length) { container.innerHTML='<p style="color:#999;text-align:center;padding:20px">No history yet.</p>'; return; }
+        const statusColor = s => ({approved:'#4CAF50',rejected:'#f44336'}[s]||'#666');
+        container.innerHTML = entries.map(r=>`
+            <div style="padding:15px;background:var(--light-bg);border-radius:8px;margin-bottom:10px;border-left:4px solid ${statusColor(r.status)}">
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                    <div>
+                        <strong>${r.student_name||'Student'}</strong> → ${r.guest_name} (${r.guest_count})
+                        <div style="font-size:0.9rem;color:#666">${r.date} — ${r.meal_type}</div>
+                        ${r.extra_charge>0?`<div style="font-size:0.85rem;color:#800000">Extra charge: ৳${r.extra_charge}</div>`:''}
+                        ${r.admin_note?`<div style="font-size:0.85rem;color:#800000">Admin note: ${r.admin_note}</div>`:''}
+                    </div>
+                    <span style="background:${statusColor(r.status)}20;color:${statusColor(r.status)};padding:5px 12px;border-radius:20px;font-weight:600;font-size:0.85rem">${r.status.toUpperCase()}</span>
+                </div>
+            </div>`).join('');
+    } catch(e) { console.error(e); }
+}
+
+async function loadDepositHistory() {
+    try {
+        const d = await api('GET','/deposits/');
+        const container = document.getElementById('depositHistoryList');
+        if (!container) return;
+        const entries = (d.results||d).filter(r => r.is_confirmed);
+        if (!entries.length) { container.innerHTML='<p style="color:#999;text-align:center;padding:20px">No confirmed deposits yet.</p>'; return; }
+        container.innerHTML = entries.map(dep=>`
+            <div style="padding:15px;background:var(--light-bg);border-radius:8px;margin-bottom:10px;border-left:4px solid #4CAF50">
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                    <div>
+                        <strong>${dep.student_name||'Student'}</strong> — <strong style="color:var(--primary-color)">৳${dep.deposited_amount}</strong>
+                        <div style="font-size:0.9rem;color:#666">${dep.month}/${dep.year}</div>
+                    </div>
+                    <span style="background:#e8f5e9;color:#2E7D32;padding:5px 12px;border-radius:20px;font-weight:600;font-size:0.85rem">✅ Confirmed</span>
+                </div>
+            </div>`).join('');
+    } catch(e) { console.error(e); }
 }
 
 // Meal rate form

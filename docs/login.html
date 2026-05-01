@@ -506,7 +506,7 @@
                     <ul class="nav-list">
                         <li><a href="design1.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
                         <li><a href="login.html" class="nav-link active"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                        <li><a href="signup.html" class="nav-link"><i class="fas fa-user-plus"></i> Sign Up</a></li>
+                        
                         <li><a href="about.html" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
                         <li><a href="contact.html" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
                     </ul>
@@ -528,114 +528,43 @@
                 <p class="login-subtitle">Access your Muktijuddha Hall dining account. Select your role to continue.</p>
             </div>
             
-            <div class="login-cards">
-                <!-- Admin Login Card -->
-                <div class="login-card admin">
-                    <div class="card-icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <h3>Admin Login</h3>
-                    <p>For hall management and authorized staff</p>
-                    
-                    <form class="login-form" id="adminLoginForm">
-                        <div class="form-group">
-                            <label for="admin-username" class="form-label">Username</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-user"></i>
-                                <input type="text" id="admin-username" class="form-input" placeholder="Enter admin username" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="admin-password" class="form-label">Password</label>
-                            <div class="input-with-icon password-wrapper">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" id="admin-password" class="form-input" placeholder="Enter your password" required>
-                                <button type="button" class="toggle-password" data-target="admin-password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="form-options">
-                            <label class="remember-me">
-                                <input type="checkbox" id="admin-remember">
-                                Remember me
-                            </label>
-                            <button type="button" class="forgot-link" id="adminForgotBtn">
-                                Forgot Password?
-                            </button>
-                        </div>
-                        
-                        <button type="submit" class="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login as Admin
-                        </button>
-                        
-                        <div class="signup-option">
-                            <p>Need admin access?</p>
-                            <a href="signup.html?type=admin" class="signup-btn">
-                                <i class="fas fa-user-shield"></i> Request Admin Account
-                            </a>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- Student Login Card -->
-                <div class="login-card student">
-                    <div class="card-icon">
-                        <i class="fas fa-user-graduate"></i>
-                    </div>
-                    <h3>Student Login</h3>
-                    <p>For residential students of Muktijuddha Hall</p>
-                    
-                    <form class="login-form" id="studentLoginForm">
-                        <div class="form-group">
-                            <label for="student-id" class="form-label">Student ID</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-id-card"></i>
-                                <input type="text" id="student-id" class="form-input" placeholder="Enter student ID" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="student-password" class="form-label">Password</label>
-                            <div class="input-with-icon password-wrapper">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" id="student-password" class="form-input" placeholder="Enter your password" required>
-                                <button type="button" class="toggle-password" data-target="student-password">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="form-options">
-                            <label class="remember-me">
-                                <input type="checkbox" id="student-remember">
-                                Remember me
-                            </label>
-                            <button type="button" class="forgot-link" id="studentForgotBtn">
-                                Forgot Password?
-                            </button>
-                        </div>
-                        
-                        <button type="submit" class="login-btn">
-                            <i class="fas fa-sign-in-alt"></i> Login as Student
-                        </button>
-                        
-                        <div class="signup-option">
-                            <p>New to dining system?</p>
-                            <a href="signup.html?type=student" class="signup-btn">
-                                <i class="fas fa-user-plus"></i> Create Student Account
-                            </a>
-                        </div>
-                    </form>
+          <div style="max-width:480px;margin:0 auto">
+    <div class="login-card" style="border-top-color:var(--primary-color)">
+        <div class="card-icon">
+            <i class="fas fa-university"></i>
+        </div>
+        <h3>Login to Dining System</h3>
+        <p>Enter your credentials to continue</p>
+
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="login-email" class="form-label">Email Address</label>
+                <div class="input-with-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="login-email" class="form-input" placeholder="Enter your email" required>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label for="login-password" class="form-label">Password</label>
+                <div class="input-with-icon password-wrapper">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password" data-target="login-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+
             
-            <div class="account-switch">
-                Don't have an account? 
-                <a href="signup.html">Sign up here</a>
-            </div>
+        </form>
+    </div>
+</div>  
+           
             
             <div class="login-note">
                 <p>
@@ -697,7 +626,6 @@
                     <ul>
                         <li><a href="design1.html">Home</a></li>
                         <li><a href="login.html">Login</a></li>
-                        <li><a href="signup.html">Sign Up</a></li>
                         <li><a href="#">Dining Schedule</a></li>
                     </ul>
                 </div>
@@ -713,33 +641,59 @@
     </footer>
 
    <script>
-    // Toggle password visibility
+    // Toggle password
     document.querySelectorAll('.toggle-password').forEach(button => {
         button.addEventListener('click', function() {
             const targetId = this.getAttribute('data-target');
-            const passwordInput = document.getElementById(targetId);
+            const input = document.getElementById(targetId);
             const icon = this.querySelector('i');
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye','fa-eye-slash');
             } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash','fa-eye');
             }
         });
     });
 
-    // Forgot Password Modal
-    const forgotModal = document.getElementById('forgotModal');
-    document.getElementById('adminForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
-    document.getElementById('studentForgotBtn').addEventListener('click', () => forgotModal.classList.add('active'));
-    document.getElementById('closeModal').addEventListener('click', () => forgotModal.classList.remove('active'));
-    document.getElementById('cancelReset').addEventListener('click', () => forgotModal.classList.remove('active'));
-    window.addEventListener('click', (e) => { if (e.target === forgotModal) forgotModal.classList.remove('active'); });
+    // Single login form
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('[type="submit"]');
+        const orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        try {
+            const res = await fetch('https://fahim026.pythonanywhere.com/api/auth/login/', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({email, password})
+            });
+            const data = await res.json();
+            if (data.access) {
+                localStorage.setItem('access_token', data.access);
+                localStorage.setItem('refresh_token', data.refresh);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                // Redirect based on role
+                if (data.user.role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'student-dashboard.html';
+                }
+            } else {
+                alert('Login failed: ' + (data.error || JSON.stringify(data)));
+            }
+        } catch(err) {
+            alert('Error: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = orig;
+        }
+    });
 </script>
-
 <script src="api_service.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
