@@ -542,16 +542,54 @@ async function loadStats() {
             bar.style.background=d.meal_off_days_remaining===0?'#f44336':'var(--primary-color)';
         }
     } catch(e){ console.error(e); }
+    loadStudentMealHistory();
 }
 
 async function loadStudentMealHistory() {
     try {
-        const d = await api('GET',`/meal-entries/?month=${mon()}&year=${yr()}`);
-        const tbody=document.getElementById('mealHistoryBody');
-        const entries=d.results||d;
-        if(!entries.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#999;padding:20px">No meal entries yet.</td></tr>'; return; }
-        tbody.innerHTML=entries.map(e=>`<tr><td>${fmtDate(e.date)}</td><td>${e.lunch?'✅':'❌'}</td><td>${e.dinner?'✅':'❌'}</td><td><strong>${e.total_meals}</strong></td></tr>`).join('');
-    } catch(e){ console.error(e); }
+        const d = await api('GET',`/meal-summary/?month=${mon()}&year=${yr()}`);
+        const tbody = document.getElementById('mealHistoryBody');
+
+        if (!d.daily_summary || !d.daily_summary.length) {
+            tbody.innerHTML='<tr><td colspan="4" style="text-align:center;color:#999;padding:20px">No data yet.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = d.daily_summary.map(day => {
+            let lunchCell, dinnerCell, rowStyle = '';
+
+            if (day.status === 'dining_closed') {
+                lunchCell = '<span style="color:#9E9E9E">🚫</span>';
+                dinnerCell = '<span style="color:#9E9E9E">🚫</span>';
+                rowStyle = 'background:#f5f5f5;';
+            } else if (day.status === 'meal_off') {
+                lunchCell = day.lunch ? '✅' : '<span style="color:#FF9800">🟡 Off</span>';
+                dinnerCell = day.dinner ? '✅' : '<span style="color:#FF9800">🟡 Off</span>';
+                rowStyle = 'background:#fff8e1;';
+            } else {
+                lunchCell = day.lunch ? '✅' : '❌';
+                dinnerCell = day.dinner ? '✅' : '❌';
+            }
+
+            return `<tr style="${rowStyle}">
+                <td>${day.date}${day.note?` <small style="color:#999">(${day.note})</small>`:''}</td>
+                <td>${lunchCell}</td>
+                <td>${dinnerCell}</td>
+                <td><strong>${(day.lunch?1:0)+(day.dinner?1:0)}</strong></td>
+            </tr>`;
+        }).join('');
+
+        // Update stats
+        setEl('totalMealsEaten', d.total_meals);
+        setEl('mealRate', fmt(d.meal_rate));
+        setEl('totalCost', fmt(d.total_cost));
+        setEl('depositedAmount', fmt(d.deposited_amount));
+        setEl('balanceAmount', fmt(d.balance));
+
+        const bal = document.getElementById('balanceAmount');
+        if (bal) bal.style.color = d.balance >= 0 ? 'var(--primary-color)' : '#f44336';
+
+    } catch(e) { console.error('Meal summary error:',e); }
 }
 
 async function loadDepositHistory() {

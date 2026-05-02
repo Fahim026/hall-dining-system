@@ -195,6 +195,7 @@
             <button class="tab-btn" onclick="switchTab('mealoff',this)"><i class="fas fa-calendar-times"></i> Meal Off <span id="pendingMealOffBadge" style="background:#f44336;color:white;border-radius:50%;padding:2px 7px;font-size:0.75rem;margin-left:5px"></span></button>
             <button class="tab-btn" onclick="switchTab('guestmeal',this)"><i class="fas fa-user-friends"></i> Guest Meals <span id="pendingGuestBadge" style="background:#f44336;color:white;border-radius:50%;padding:2px 7px;font-size:0.75rem;margin-left:5px"></span></button>
             <button class="tab-btn" onclick="switchTab('deposits',this)"><i class="fas fa-money-bill"></i> Deposits <span id="pendingDepositBadge" style="background:#f44336;color:white;border-radius:50%;padding:2px 7px;font-size:0.75rem;margin-left:5px"></span></button>
+            <button class="tab-btn" onclick="switchTab('dining',this)"><i class="fas fa-calendar-check"></i> Dining Schedule</button>
             <button class="tab-btn" onclick="switchTab('rate',this)"><i class="fas fa-calculator"></i> Meal Rate</button>
         </div>
 
@@ -473,6 +474,53 @@
 </div>
             </div>
         </div>
+
+        <!-- TAB: Dining Schedule -->
+<div class="tab-content" id="tab-dining">
+    <div class="management-section">
+        <div class="section-header">
+            <h3 class="section-title"><i class="fas fa-calendar-check"></i> Mark Dining Day</h3>
+        </div>
+        <p style="color:var(--medium-text);margin-bottom:20px">By default all days are open. Mark a day as closed for holidays or special occasions.</p>
+        <form id="diningDayForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Date *</label>
+                    <input type="date" id="diningDate" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status *</label>
+                    <select id="diningStatus" class="form-select">
+                        <option value="true">✅ Dining Open</option>
+                        <option value="false">❌ Dining Closed</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Note (optional)</label>
+                    <input type="text" id="diningNote" class="form-input" placeholder="e.g. Eid Holiday">
+                </div>
+            </div>
+            <button type="submit" class="btn"><i class="fas fa-save"></i> Save</button>
+        </form>
+    </div>
+
+    <div class="management-section">
+        <div class="section-header">
+            <h3 class="section-title"><i class="fas fa-list"></i> This Month's Dining Schedule</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadDiningDays()"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Date</th><th>Status</th><th>Note</th></tr>
+                </thead>
+                <tbody id="diningDaysBody">
+                    <tr><td colspan="3" style="text-align:center;color:#999;padding:20px">Click Refresh to load</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
         <!-- TAB: Meal Rate -->
         <div class="tab-content" id="tab-rate">
@@ -1030,6 +1078,44 @@ document.getElementById('mealRateForm').addEventListener('submit', async functio
     } catch(err){ toast(err.detail||'Error calculating rate.','error'); }
     finally { btn.disabled=false; btn.innerHTML=orig; }
 });
+// Dining days form
+document.getElementById('diningDayForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn=this.querySelector('[type="submit"]'); const orig=btn.innerHTML;
+    btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';
+    try {
+        await api('POST','/dining-days/',{
+            date: document.getElementById('diningDate').value,
+            is_open: document.getElementById('diningStatus').value === 'true',
+            note: document.getElementById('diningNote').value||''
+        });
+        toast('Dining schedule updated!','success');
+        this.reset();
+        document.getElementById('diningDate').value = new Date().toISOString().split('T')[0];
+        loadDiningDays();
+    } catch(err) { toast(err.detail||'Error saving.','error'); }
+    finally { btn.disabled=false; btn.innerHTML=orig; }
+});
+
+// Load dining days
+async function loadDiningDays() {
+    try {
+        const d = await api('GET',`/dining-days/?month=${mon()}&year=${yr()}`);
+        const tbody = document.getElementById('diningDaysBody');
+        const days = d.results||d;
+        if (!days.length) {
+            tbody.innerHTML='<tr><td colspan="3" style="text-align:center;color:#999;padding:20px">All days are open this month.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = days.map(d=>`
+            <tr>
+                <td>${d.date}</td>
+                <td>${d.is_open?'<span style="color:#4CAF50;font-weight:600">✅ Open</span>':'<span style="color:#f44336;font-weight:600">❌ Dining Closed</span>'}</td>
+                <td>${d.note||'-'}</td>
+            </tr>`).join('');
+    } catch(e) { console.error(e); }
+}
+document.getElementById('diningDate').value = new Date().toISOString().split('T')[0];
 
 // Load on start
 loadAdminStats();
