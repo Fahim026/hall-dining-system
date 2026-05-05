@@ -635,7 +635,7 @@ async function loadAdminStats() {
         setEl('totalDepositsStat', fmt(d.total_confirmed_deposits||0));
         setEl('totalBazarStat', fmt(d.total_bazar_cost||0));
         setEl('pendingMealOffsStat', (d.pending_meal_offs||0)+(d.pending_guest_meals||0)+(d.pending_deposits||0));
-        setEl('mealRateStat', d.current_meal_rate ? fmt(d.current_meal_rate) : 'N/A');
+        setEl('mealRateStat', d.current_meal_rate ? fmt(d.current_meal_rate) : '40');
         setEl('pendingMealOffBadge', d.pending_meal_offs||'');
         setEl('pendingGuestBadge', d.pending_guest_meals||'');
         setEl('pendingDepositBadge', d.pending_deposits||'');
