@@ -630,16 +630,16 @@ document.getElementById('logoutBtn').addEventListener('click', async function() 
 async function loadAdminStats() {
     try {
         const d = await api('GET',`/dashboard/admin/?month=${mon()}&year=${yr()}`);
-        setEl('totalStudentsStat', d.total_students);
-        setEl('totalMealsStat', d.total_meals);
-        setEl('totalDepositsStat', fmt(d.total_deposits));
-        setEl('totalBazarStat', fmt(d.total_bazar_cost));
-        setEl('pendingMealOffsStat', d.pending_meal_offs + d.pending_guest_meals + d.pending_deposits);
-        setEl('mealRateStat', d.meal_rate ? fmt(d.meal_rate) : 'N/A');
-        setEl('pendingMealOffBadge', d.pending_meal_offs || '');
-        setEl('pendingGuestBadge', d.pending_guest_meals || '');
-        setEl('pendingDepositBadge', d.pending_deposits || '');
-    } catch(e){ console.error(e); }
+        setEl('totalStudentsStat', d.total_students||0);
+        setEl('totalMealsStat', d.total_meals_this_month||0);
+        setEl('totalDepositsStat', fmt(d.total_confirmed_deposits||0));
+        setEl('totalBazarStat', fmt(d.total_bazar_cost||0));
+        setEl('pendingMealOffsStat', (d.pending_meal_offs||0)+(d.pending_guest_meals||0)+(d.pending_deposits||0));
+        setEl('mealRateStat', d.current_meal_rate ? fmt(d.current_meal_rate) : 'N/A');
+        setEl('pendingMealOffBadge', d.pending_meal_offs||'');
+        setEl('pendingGuestBadge', d.pending_guest_meals||'');
+        setEl('pendingDepositBadge', d.pending_deposits||'');
+    } catch(e){ console.error('Stats error:',e); }
 }
 
 // Load students
