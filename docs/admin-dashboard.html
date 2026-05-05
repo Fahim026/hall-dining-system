@@ -640,8 +640,6 @@ async function loadAdminStats() {
         setEl('pendingGuestBadge', d.pending_guest_meals || '');
         setEl('pendingDepositBadge', d.pending_deposits || '');
     } catch(e){ console.error(e); }
-
-    await recalcStatsFromDeposits();
 }
 
 // Load students
@@ -957,26 +955,33 @@ async function loadPendingDeposits() {
 
 async function confirmDeposit(id) {
     try {
-        const res = await fetch(BASE + `/deposits/${id}/confirm/`, {
+        const res = await fetch(BASE+`/deposits/${id}/confirm/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+            headers: {'Content-Type':'application/json','Authorization':'Bearer '+getToken()},
             body: JSON.stringify({})
         });
         const data = await res.json();
         if (res.ok) {
-            toast('Deposit confirmed!', 'success');
-            await loadPendingDeposits();
-            await loadDepositHistory();
-            await recalcStatsFromDeposits();
+            toast('Deposit confirmed!','success');
+            // Remove card immediately from UI
+            const card = document.querySelector(`.request-card[data-id="${id}"]`);
+            if (card) {
+                card.remove();
+            } else {
+                // Reload if card not found
+                await loadPendingDeposits();
+            }
+            loadDepositHistory();
+            loadAdminStats();
         } else {
-            toast('Error: ' + JSON.stringify(data), 'error');
+            toast('Error: '+JSON.stringify(data),'error');
+            console.error(data);
         }
-    } catch(e) {
-        toast('Error confirming.', 'error');
-        console.error(e);
+    } catch(e) { 
+        toast('Error confirming.','error'); 
+        console.error(e); 
     }
-}
-  async function rejectDeposit(id) {
+}    async function rejectDeposit(id) {
     if (!confirm('Reject this deposit?')) return;
     try {
         await api('DELETE',`/deposits/${id}/`);
