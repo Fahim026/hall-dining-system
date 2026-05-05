@@ -630,8 +630,8 @@ document.getElementById('logoutBtn').addEventListener('click', async function() 
 async function loadAdminStats() {
     try {
         const d = await api('GET',`/dashboard/admin/?month=${mon()}&year=${yr()}`);
-        setEl('totalStudentsStat', d.total_students||50);
-        setEl('totalMealsStat', d.total_meals_this_month||0);
+        setEl('totalStudentsStat', d.total_students||0);
+        setEl('totalMealsStat', d.total_meals_this_month||50);
         setEl('totalDepositsStat', fmt(d.total_confirmed_deposits||0));
         setEl('totalBazarStat', fmt(d.total_bazar_cost||0));
         setEl('pendingMealOffsStat', (d.pending_meal_offs||0)+(d.pending_guest_meals||0)+(d.pending_deposits||0));
