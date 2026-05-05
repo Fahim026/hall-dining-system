@@ -556,6 +556,12 @@
                 </div>
             </div>
 
+            <div style="text-align:right;margin-top:5px">
+                <button type="button" class="forgot-link" style="background:none;border:none;color:#800000;cursor:pointer;font-size:0.9rem;font-weight:600">
+                 Forgot Password?
+                </button>
+            </div>
+
             <button type="submit" class="login-btn">
                 <i class="fas fa-sign-in-alt"></i> Login
             </button>
@@ -576,42 +582,54 @@
     </main>
 
     <!-- Forgot Password Modal -->
-    <div class="forgot-modal" id="forgotModal">
-        <div class="forgot-content">
-            <button class="close-modal" id="closeModal">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <div class="forgot-header">
-                <i class="fas fa-key"></i>
-                <h3>Reset Your Password</h3>
-            </div>
-            
-            <p class="forgot-instructions">
-                Enter your username or email address. We'll send you a link to reset your password.
+<div class="forgot-modal" id="forgotModal">
+    <div class="forgot-content">
+        <button class="close-modal" id="closeModal">
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="forgot-header">
+            <i class="fas fa-key"></i>
+            <h3>Forgot Password?</h3>
+        </div>
+
+        <p class="forgot-instructions">
+            To reset your password, please contact the Dining Admin directly:
+        </p>
+
+        <div style="background:#f8f9fa;border-radius:8px;padding:20px;margin:15px 0">
+            <p style="margin-bottom:12px;display:flex;align-items:center;gap:10px">
+                <i class="fas fa-user-tie" style="color:#800000;width:20px"></i>
+                <strong>Dining Admin</strong>
             </p>
-            
-            <form id="forgotForm">
-                <div class="form-group">
-                    <label for="reset-email" class="form-label">Email or Username</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="text" id="reset-email" class="form-input" placeholder="Enter email or username" required>
-                    </div>
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="submit" class="modal-btn primary">
-                        <i class="fas fa-paper-plane"></i> Send Reset Link
-                    </button>
-                    <button type="button" class="modal-btn secondary" id="cancelReset">
-                        Cancel
-                    </button>
-                </div>
-            </form>
+            <p style="margin-bottom:12px;display:flex;align-items:center;gap:10px">
+                <i class="fas fa-phone" style="color:#800000;width:20px"></i>
+                <a href="tel:01234567890" style="color:#800000;text-decoration:none;font-weight:600">01234567890</a>
+            </p>
+            <p style="margin-bottom:12px;display:flex;align-items:center;gap:10px">
+                <i class="fas fa-envelope" style="color:#800000;width:20px"></i>
+                <a href="mailto:admin@muktijuddha.com" style="color:#800000;text-decoration:none;font-weight:600">admin@muktijuddha.com</a>
+            </p>
+            <p style="display:flex;align-items:center;gap:10px">
+                <i class="fas fa-map-marker-alt" style="color:#800000;width:20px"></i>
+                <span>Muktijuddha Hall Office, CUET</span>
+            </p>
+        </div>
+
+        <div style="background:#fff8e1;border:1px solid #FFD700;border-radius:8px;padding:15px;margin-top:10px">
+            <p style="font-size:0.9rem;color:#666">
+                <i class="fas fa-info-circle" style="color:#800000"></i>
+                &nbsp;The admin will verify your identity and reset your password. Please bring your student ID when visiting the office.
+            </p>
+        </div>
+
+        <div class="modal-actions">
+            <button type="button" class="modal-btn primary" id="cancelReset">
+                <i class="fas fa-check"></i> Got it!
+            </button>
         </div>
     </div>
-
+</div>
     <!-- Footer -->
     <footer class="main-footer">
         <div class="container">
@@ -752,6 +770,23 @@
             });
         }
     });
+
+    // Forgot Password Modal
+const forgotModal = document.getElementById('forgotModal');
+const closeModal = document.getElementById('closeModal');
+const cancelReset = document.getElementById('cancelReset');
+
+// Open modal buttons - add these if you have forgot password buttons
+document.querySelectorAll('.forgot-link').forEach(btn => {
+    btn.addEventListener('click', () => forgotModal.classList.add('active'));
+});
+
+// Close modal
+closeModal.addEventListener('click', () => forgotModal.classList.remove('active'));
+cancelReset.addEventListener('click', () => forgotModal.classList.remove('active'));
+window.addEventListener('click', (e) => {
+    if (e.target === forgotModal) forgotModal.classList.remove('active');
+});
 </script>
 </body>
 </html>
